@@ -1,139 +1,43 @@
 
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 using namespace std;
 
 int main()
 {
-    const int SIZE = 9;
-    const int MINES = 10;
+    char board[9][9];
 
-    char board[SIZE][SIZE];
-    bool revealed[SIZE][SIZE] = {false};
-
-    srand(time(0));
-
-    // Initialize board
-    for (int i = 0; i < SIZE; i++)
+    // Fill the board with hidden cells
+    for (int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < SIZE; j++)
+        for (int j = 0; j < 9; j++)
         {
-            board[i][j] = '0';
+            board[i][j] = '#';
         }
     }
 
-    // Place mines
-    int count = 0;
+    // Display the board
+    cout << "===== MINESWEEPER GAME =====" << endl;
+    cout << endl;
 
-    while (count < MINES)
+    cout << "   ";
+    for (int j = 0; j < 9; j++)
     {
-        int r = rand() % SIZE;
-        int c = rand() % SIZE;
-
-        if (board[r][c] != '*')
-        {
-            board[r][c] = '*';
-            count++;
-        }
+        cout << j + 1 << " ";
     }
 
-    // Calculate nearby mines
-    for (int i = 0; i < SIZE; i++)
+    cout << endl;
+
+    for (int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < SIZE; j++)
+        cout << i + 1 << "  ";
+
+        for (int j = 0; j < 9; j++)
         {
-            if (board[i][j] == '*')
-                continue;
-
-            int mines = 0;
-
-            for (int x = -1; x <= 1; x++)
-            {
-                for (int y = -1; y <= 1; y++)
-                {
-                    int r = i + x;
-                    int c = j + y;
-
-                    if (r >= 0 && r < SIZE && c >= 0 && c < SIZE)
-                    {
-                        if (board[r][c] == '*')
-                            mines++;
-                    }
-                }
-            }
-
-            board[i][j] = '0' + mines;
+            cout << board[i][j] << " ";
         }
+
+        cout << endl;
     }
-
-    int safeCells = 0;
-
-    cout << "===== MINESWEEPER GAME =====\n";
-
-    while (safeCells < SIZE * SIZE - MINES)
-    {
-        cout << "\n   ";
-
-        for (int j = 0; j < SIZE; j++)
-            cout << j + 1 << " ";
-
-        cout << "\n";
-
-        for (int i = 0; i < SIZE; i++)
-        {
-            cout << i + 1 << "  ";
-
-            for (int j = 0; j < SIZE; j++)
-            {
-                if (revealed[i][j])
-                    cout << board[i][j] << " ";
-                else
-                    cout << "# ";
-            }
-
-            cout << "\n";
-        }
-
-        int row, col;
-
-        cout << "\nEnter row (1-9): ";
-        cin >> row;
-
-        cout << "Enter column (1-9): ";
-        cin >> col;
-
-        if (row < 1 || row > 9 || col < 1 || col > 9)
-        {
-            cout << "Invalid position! Try again.\n";
-            continue;
-        }
-
-        row--;
-        col--;
-
-        if (revealed[row][col])
-        {
-            cout << "This cell is already opened!\n";
-            continue;
-        }
-
-        if (board[row][col] == '*')
-        {
-            cout << "\nBOOM! You hit a mine. GAME OVER!\n";
-            break;
-        }
-
-        revealed[row][col] = true;
-        safeCells++;
-
-        cout << "\nSafe! Nearby mines: " << board[row][col] << "\n";
-    }
-
-    if (safeCells == SIZE * SIZE - MINES)
-        cout << "\nCongratulations! YOU WIN!\n";
-
-    cout << "\n===== GAME FINISHED =====\n";
 
     return 0;
 }
